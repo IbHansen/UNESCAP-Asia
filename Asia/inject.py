@@ -12,7 +12,6 @@ import  ipywidgets as widgets
 from IPython.display import display, clear_output,Latex, Markdown
 
 
-from modelclass import model
 from modelclass import insertModelVar
 from modeljupyter import get_alt_dic, jupviz
 
@@ -39,7 +38,13 @@ def inject(self):
 
     #breakpoint()
     setattr(self.__class__,'inputwidget_asia', inputwidget_asia)
-
+    
+    self.nametrans = nametrans
+    
+def nametrans(varnames,thismodel):
+    out = [thismodel.iso_dict.get(cname := c.split('_')[0],cname) for c in varnames]
+    return out
+                              
 def inputwidget_asia(self, start='', slut='', basedf=None, **kwargs):
     ''' calls modeljupyter input widget, and keeps the period scope '''
     if type(basedf) == type(None):
@@ -53,7 +58,7 @@ def inputwidget_asia(self, start='', slut='', basedf=None, **kwargs):
 
 
 def inputwidget(model,basedf,slidedef={},radiodef=[],checkdef=[],modelopt={},varpat='RFF XGDPN RFFMIN GFSRPN DMPTRSH XXIBDUMMY'
-                 ,showout=1,trans={},base1name='',alt1name='',go_now=True,showvar=False):
+                 ,showout=1,trans=None,base1name='',alt1name='',go_now=True,showvar=False):
     '''Creates an input widgets for updating variables 
     
     :df: Baseline dataframe 
@@ -62,6 +67,11 @@ def inputwidget(model,basedf,slidedef={},radiodef=[],checkdef=[],modelopt={},var
                second level defines the text for each leved and the variable to set or reset to 0
     :varpat: the variables to show in the output widget
     :showout: 1 if the output widget is to be called '''
+    
+    if type(trans) == type(None):
+        thistrans = model.var_description
+    else:
+        thistrans = trans 
     
     lradiodef= len(radiodef)
     lslidedef = len(slidedef)
@@ -81,7 +91,7 @@ def inputwidget(model,basedf,slidedef={},radiodef=[],checkdef=[],modelopt={},var
 
 # define slidesets 
     if lslidedef:     
-        wexp  = widgets.Label(value="Carbon tax rate, US$ per tonn ",layout={'width':'%'})
+        wexp  = widgets.Label(value="Carbon tax rate, US$ per tonn ",layout={'width':'54%'})
         walt  = widgets.Label(value=f'{altname}',layout={'width':'10%'})
         wbas  = widgets.Label(value=f'{basename}',layout={'width':'20%'})
         whead = widgets.HBox([wexp,walt,wbas])
@@ -90,7 +100,8 @@ def inputwidget(model,basedf,slidedef={},radiodef=[],checkdef=[],modelopt={},var
                                     min=cont['min'],max=cont['max'],value=cont['value'],step=cont.get('step',0.01),
                                     layout={'width':'60%'},style={'description_width':'40%'},readout_format = f":<,.{cont.get('dec',2)}f")
                  for des,cont in slidedef.items()]
-        formattest = ':>.2f'
+        
+        
         waltval= [widgets.Label(value=f"{cont['value']:<,.{cont.get('dec',2)}f}",layout={'width':'10%'})
                   for des,cont  in slidedef.items()]
         wslide = [widgets.HBox([s,v]) for s,v in zip(wset,waltval)]
@@ -172,6 +183,8 @@ def inputwidget(model,basedf,slidedef={},radiodef=[],checkdef=[],modelopt={},var
 
         #with out:
         clear_output()
+        display(w)
+        display(widgets.Label(value="Solving model ",layout={'width':'54%'}))
         mul = model(mulstart,**modelopt)
         # model.mulstart=mulstart
 
@@ -195,9 +208,9 @@ def inputwidget(model,basedf,slidedef={},radiodef=[],checkdef=[],modelopt={},var
         if showout:
             varpat_this =  wpat.value
             resdic = get_alt_dic(model,varpat_this,model.experiment_results)
-            a = jupviz(resdic,trans=trans)()
+            a = jupviz(resdic,trans=thistrans)()
         else:  
-            a = vis_alt4(get_alt_dic(model,wpat.value,model.experiment_results),model,trans=trans)
+            a = vis_alt4(get_alt_dic(model,wpat.value,model.experiment_results),model,trans=thistrans)
 
     def reset(b):
 

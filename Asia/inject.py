@@ -138,6 +138,8 @@ def inputwidget(model,basedf,slidedef={},radiodef=[],checkdef=[],modelopt={},var
 
     # This function is run when the button is clecked 
     firstrun = True
+    model.inputwidget_alternativerun = False
+
     model.rundic = {}
     
     def run(b):
@@ -198,13 +200,15 @@ def inputwidget(model,basedf,slidedef={},radiodef=[],checkdef=[],modelopt={},var
             model.experiment_results = {}
             model.experiment_results[basename] = {'results':model.lastdf.copy()}
             firstrun = False
+            model.inputwidget_firstrun = False
             wname.value = f'{altname}'
         else:
             altname = wname.value
             walt.value = f'{altname}'
             model.experiment_results[altname] = {'results':model.lastdf.copy()}
+            model.inputwidget_alternativerun = True
 
-        
+        model.dekomp.cache_clear()
         if showout:
             varpat_this =  wpat.value
             resdic = get_alt_dic(model,varpat_this,model.experiment_results)

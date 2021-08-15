@@ -26,7 +26,7 @@ def inject(self):
     des['des'] = des.des1.str.cat(des.des2.astype(str).str.replace('nan',''))
     des = des[['var_template','des']]
     
-    self.des_dict = {var_template.strip() : des for var_template,des in [row.tolist() for i,row in des.iterrows()]}
+    self.stemname_dict = self.defsub({var_template.strip().replace('$','_DOLLAR').replace('{ISO}_','') : des for var_template,des in [row.tolist() for i,row in des.iterrows()]})
     
     iso = (pd.read_excel(data  ,sheet_name='Country prefixes').
            iloc[1:,:])
@@ -39,9 +39,20 @@ def inject(self):
     #breakpoint()
     setattr(self.__class__,'inputwidget_asia', inputwidget_asia)
     
-    self.nametrans = nametrans
+    self.country_get = country_get
+    # dollar in variable name, adjust the vardescription 
     
-def nametrans(varnames,thismodel):
+    xx = {k: self.var_description[originalname]  for k  in self.allvar
+       if (originalname := k.replace('_DOLLAR','$')) in self.var_description and '_DOLLAR' in k } 
+
+    self.var_description = {**self.var_description , **xx}
+    self.var_description = self.defsub({k : v.replace('CO2','$CO^2$') 
+                                        for k,v in self.var_description.items()
+                                       if k in self.allvar })
+
+
+def country_get(varnames,thismodel):
+    '''Returns the country/area name for a variable '''
     out = [thismodel.iso_dict.get(cname := c.split('_')[0],cname) for c in varnames]
     return out
                               

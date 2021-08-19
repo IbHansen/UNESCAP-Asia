@@ -67,7 +67,6 @@ def inputwidget_asia(self, start='', slut='', basedf=None, **kwargs):
         with self.set_smpl(start=start, slut=slut):
             return inputwidget(self, self.basedf, **kwargs)
 
-
 def inputwidget(model,basedf,slidedef={},radiodef=[],checkdef=[],modelopt={},varpat='RFF XGDPN RFFMIN GFSRPN DMPTRSH XXIBDUMMY'
                  ,showout=1,trans=None,base1name='',alt1name='',go_now=True,showvar=False):
     '''Creates an input widgets for updating variables 
@@ -127,8 +126,21 @@ def inputwidget(model,basedf,slidedef={},radiodef=[],checkdef=[],modelopt={},var
                         layout={'width':'30%'},style={'description_width':'50%'})
     wpat = widgets.Text(value=varpat,placeholder='Type something',description='Output variables:',
                         layout={'width':'65%'},style={'description_width':'30%'})
+
+    def showresult(change):
+        # print(change)
+        if change.type == 'change' and change.name == 'value':
+            clear_output()
+            display(w)
+
+            varpat_this =  change.new
+            resdic = get_alt_dic(model,varpat_this,model.experiment_results)
+            a = jupviz(resdic,trans=thistrans)()
+  
+
     if showvar:
         wpat.layout.visibility = 'visible'
+        wpat.observe(showresult)
     else:
         wpat.layout.visibility = 'hidden'
         
@@ -224,8 +236,8 @@ def inputwidget(model,basedf,slidedef={},radiodef=[],checkdef=[],modelopt={},var
             varpat_this =  wpat.value
             resdic = get_alt_dic(model,varpat_this,model.experiment_results)
             a = jupviz(resdic,trans=thistrans)()
-        else:  
-            a = vis_alt4(get_alt_dic(model,wpat.value,model.experiment_results),model,trans=thistrans)
+
+      
 
     def reset(b):
 

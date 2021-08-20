@@ -236,6 +236,7 @@ def inputwidget(model,basedf,slidedef={},radiodef=[],checkdef=[],modelopt={},var
             varpat_this =  wpat.value
             resdic = get_alt_dic(model,varpat_this,model.experiment_results)
             a = jupviz(resdic,trans=thistrans)()
+            model.dekomp_plot('WLD_CO2',pct=0,threshold=200,nametrans=model.country_get)
 
       
 
@@ -317,4 +318,3 @@ if __name__ == '__main__':
         masia,baseline = model.modelload('Asia.pcim',run=1,silent=1)    
     inject(masia)
 
-    masia.country_dict_GCARBR_A

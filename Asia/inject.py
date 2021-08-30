@@ -38,6 +38,7 @@ def inject(self):
 
     #breakpoint()
     setattr(self.__class__,'inputwidget_asia', inputwidget_asia)
+    setattr(self.__class__,'get_a_country', get_a_country)
     
     self.country_get = country_get
     # dollar in variable name, adjust the vardescription 
@@ -50,6 +51,13 @@ def inject(self):
                                         for k,v in self.var_description.items()
                                        if k in self.allvar })
 
+
+def get_a_country(self,varname):
+    try: 
+        out = self.iso_dict.get(varname.split('_')[0],varname)
+    except: 
+        out=varname
+    return out     
 
 def country_get(varnames,thismodel):
     '''Returns the country/area name for a variable '''

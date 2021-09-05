@@ -244,7 +244,7 @@ def inputwidget(model,basedf,slidedef={},radiodef=[],checkdef=[],modelopt={},var
             varpat_this =  wpat.value
             resdic = get_alt_dic(model,varpat_this,model.experiment_results)
             a = jupviz(resdic,trans=thistrans)()
-            model.dekomp_plot('WLD_CO2',pct=0,threshold=200,nametrans=model.country_get)
+            # model.dekomp_plot('WLD_CO2',pct=0,threshold=200,nametrans=model.country_get)
 
       
 

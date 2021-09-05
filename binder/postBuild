@@ -13,4 +13,5 @@ jupyter trust "Asia/test output widgets .ipynb"
 jupyter trust "Asia/test sheets-Copy1.ipynb"
 jupyter trust "Asia/test sheets.ipynb"
 jupyter nbextension enable hide_input_all/main
+jupyter nbextension enable splitcell/splitcell
 exec "$@"

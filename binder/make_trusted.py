@@ -16,5 +16,6 @@ with open('Postbuild','wt') as f:
         for notebook in dir.glob('*.ipynb'):
             n = PurePosixPath(notebook)
             f.write(f'jupyter trust "{str(n).split("/",1)[1]}"\n')
-    f.write('jupyter nbextension enable hide_input_all/main\n')        
+    f.write('jupyter nbextension enable hide_input_all/main\n')  
+    f.write('jupyter nbextension enable splitcell/splitcell\n')     
     f.write('exec "$@"')

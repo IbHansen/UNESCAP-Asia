@@ -75,6 +75,7 @@ class GrapUNModel():
                     
         self.all_frml = [nz.normal(l,add_adjust=(typ=='stoc')) for l,typ in tqdm(zip(line,line_type),desc='Normalizing model',total=len(line),bar_format=bars)]
         lfname = ["<Z,EXO> " if typ == 'stoc' else '' for typ in line_type ]
+        lfname = ["" if typ == 'stoc' else '' for typ in line_type ]
         self.rorg = [fname + f.normalized for f,fname in zip(self.all_frml,lfname) ]
                 
         self.rres = [f.calc_adjustment for f in self.all_frml if len(f.calc_adjustment)]
@@ -129,7 +130,7 @@ class GrapUNModel():
                 self.showduringvars = df[during_vars] 
                 # breakpoint()
                 df_out = self.mmodel.insertModelVar(df).pipe(self.country_df_trans)
-                return df_out.loc[:2050,:]
+                return df_out.loc[:2050,:].copy()
             
             
     def __call__(self):
@@ -211,7 +212,8 @@ class GrapUNModel():
         # powers
         rawmodel2 = rawmodel1.replace('^','**').replace('""',' ').replace('"',' ').\
             replace('@EXP','exp').replace('@RECODE','recode').replace('@MOVAV','movavg').replace('@LOGIT(','LOGIT(') \
-            .replace('@MEAN(@PC(','@AVERAGE_GROWTH((').replace('@PC','PCT_GROWTH').replace('@QGAMMA','QGAMMA').replace('@CLOGNORM','CLOGNORM')    
+            .replace('@MEAN(@PC(','@AVERAGE_GROWTH((').replace('@PC','PCT_GROWTH').replace('@QGAMMA','QGAMMA').replace('@CLOGNORM','CLOGNORM')\
+            .replace('@TREND','TREND')
         # @ELEM and @DURING 
         # @ELEM and @DURING 
         rawmodel3 = nz.elem_trans(rawmodel2) 
@@ -235,10 +237,14 @@ class GrapUNModel():
     def asia_des(self):
         des = (pd.read_excel(self.data,sheet_name='Variable definitions',header=None).
               rename(columns={0:'var_template',1:'des1',2:'des2'}))
-        
-        des['des'] = des.des1.str.cat(des.des2.astype(str).str.replace('nan',''))
+        # breakpoint()
+        try:
+            des['des'] = des.des1.str.cat(des.des2.astype(str).str.replace('nan',''))
+        except:
+            des['des'] = des.des1
+            
         des = des[['var_template','des']]
-        des_dict = {var_template.strip() : des for var_template,des in [row.tolist() for i,row in des.iterrows()]}
+        des_dict = {self.country_trans(var_template.strip()) : des.replace('CO2','$CO^2$') for var_template,des in [row.tolist() for i,row in des.iterrows()]}
         
         iso = (pd.read_excel(self.data,sheet_name='Country prefixes').
                iloc[1:,:])
@@ -250,13 +256,16 @@ class GrapUNModel():
         #     for var_template,des in des_dict.items():
         #         print(var_template.replace('{ISO}',iso).replace('$','_DOLLAR'),f'{des} ,{country}')
                 
-        return  {var_template.replace('{ISO}',iso):f'{des} ,{country}'
+        dict2=   {var_template.replace('{ISO}',iso):f'{des} ,{country}'
         for var_template,des in des_dict.items()
         for iso,country in iso_dict.items() 
-        }        
+        }   
+        return dict2
     
 # os.environ['PYTHONBREAKPOINT']=None
-asia = GrapUNModel()
+asia = GrapUNModel(data='data/model_data_7Sept.xlsx',
+                   frml='model/modtext_7sept.txt',
+                   modelname='Asia_7sept')
 asia.test_model(2020,2050,maxerr=200,tol=0.000001,showall=1)
 
 #%%
@@ -265,7 +274,7 @@ def var_description_addon(self):
     add_d =   { newname : 'Add factor:'+ self.var_description.get(v,v)      for v in self.endogene if  (newname := v+'_A') in self.exogene }
     dummy_d = { newname : 'Exo dummy:'+ self.var_description.get(v,v)  for v in self.endogene if  (newname := v+'_D')  in self.exogene }
     exo_d =   { newname : 'Exo value:'+ self.var_description.get(v,v)      for v in self.endogene if  (newname := v+'_X')  in self.exogene }
-    self.var_description = {**self.var_description,**add_d,**dummy_d,**exo_d}
+    self.set_var_description({**self.var_description,**add_d,**dummy_d,**exo_d})
 model.var_description_addon = var_description_addon
 masia = asia.mmodel
 masia.var_description_addon()

@@ -278,21 +278,20 @@ def var_description_addon(self):
 model.var_description_addon = var_description_addon
 masia = asia.mmodel
 masia.var_description_addon()
-baseline = asia.base_input
+baseline = asia.base_input.copy()
+share_countries  =[v.split('_')[0] for v in masia['*_sharex'].names]
+sharenames = [f'{country}_{sharename}_A'.upper() for country in share_countries for sharename in ['sharee','sharex','shareh','sharesp']]
+baseline[sharenames] = 0.25 
 masia.basedf = baseline
 _ = masia(baseline,2021,2050,silent=0)
 masia['*_GDI'].dif.plot(sharey=0,colrow=1)
 
-# masia.modeldump('asia/Asia.pcim')
+masia.modeldump('asia/Asia_sep7.pcim')
 #%% experiment
 altdf = baseline.copy()
 altdf.loc[2021:2021,'KHM_GCARBR_A'] = altdf.loc[2021:2021,'KHM_GCARBR_A'] + 20  
-for exovar in 'KHM_PREM KHM_EXPE KHM_EXPH KHM_EXPSP KHM_OGC KHM_OGI'.split():
-        altdf.loc[2021:2050,exovar+'_D'] = 1
-        altdf.loc[2021:2050,exovar+'_X'] = altdf.loc[2021:2050,exovar]
-        
 
-altres = masia(altdf,2021,2050,silent=0,first_test = 4,ljit=0)
+altres = masia(altdf,2021,2050,silent=0,first_test = 5,ljit=0)
 masia['*_GDI'].dif.plot(colrow=1)
 masia.KHM_GCARBR
 masia.KHM_PREM

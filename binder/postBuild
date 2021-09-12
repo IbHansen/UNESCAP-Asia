@@ -1,21 +1,13 @@
 #!/bin/bash 
 jupyter trust "Asia/Asia logical structure.ipynb"
-jupyter trust "Asia/Asia run model-sep7.ipynb"
 jupyter trust "Asia/Asia run model.ipynb"
-jupyter trust "Asia/Carbon tax experiments-sep7.ipynb"
 jupyter trust "Asia/Carbon tax experiments.ipynb"
-jupyter trust "Asia/Impact of carbon tax rates changed from 2021 and forward .ipynb"
-jupyter trust "Asia/Impact of carbon tax rates changed from 2022-sep7.ipynb"
-jupyter trust "Asia/Impact of carbon tax rates changed from 2022.ipynb"
+jupyter trust "Asia/Impact of carbon tax rates changed from 2022 and forward.ipynb"
 jupyter trust "Asia/Invert tax and emmision.ipynb"
 jupyter trust "Asia/Overview.ipynb"
-jupyter trust "Asia/test Asia iinject.ipynb"
-jupyter trust "Asia/test Asia interactive first try.ipynb"
 jupyter trust "Asia/test Asia new widget.ipynb"
 jupyter trust "Asia/test Asia updatetab.ipynb"
 jupyter trust "Asia/test output widgets .ipynb"
-jupyter trust "Asia/test sheets-Copy1.ipynb"
-jupyter trust "Asia/test sheets.ipynb"
 jupyter nbextension enable hide_input_all/main
 jupyter nbextension enable splitcell/splitcell
 exec "$@"

@@ -1,0 +1,4 @@
+conda create -n mf  modelflow -c ibh
+conda activate mf 
+conda install pip 
+pip install dash_interactive_graphviz

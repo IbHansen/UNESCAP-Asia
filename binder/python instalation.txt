@@ -1,4 +1,5 @@
-conda create -n mf  modelflow -c ibh -c conda-forge 
+conda create -n mf python=3.8  modelflow --override-channels --strict-channel-priority  -c ibh -c default -c conda-forge 
 conda activate mf 
 conda install pip 
 pip install dash_interactive_graphviz
+conda create -n mf python=3.8  modelflow -c ibh -c conda-forge -c default

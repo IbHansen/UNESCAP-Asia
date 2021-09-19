@@ -47,7 +47,7 @@ def inject(self):
        if (originalname := k.replace('_DOLLAR','$')) in self.var_description and '_DOLLAR' in k } 
 
     self.var_description = {**self.var_description , **xx}
-    self.var_description = self.defsub({k : v.replace('CO2','$CO^2$') 
+    self.var_description = self.defsub({k : v.replace('CO2','$CO^2$').replace(r'$per',r'\$per')
                                         for k,v in self.var_description.items()
                                        if k in self.allvar })
 

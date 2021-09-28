@@ -1,0 +1,12 @@
+https://docs.conda.io/en/latest/miniconda.html to download the latest version 3.9 
+open the file to start instalation 
+asked to install for: select just me
+in the start menu: select anaconda promth 
+
+conda  install  -c ibh -c  conda-forge modelflow -y 
+jupyter contrib nbextension install --user
+
+# or if in seperate enviorement 
+conda create -n mf -c ibh -c  conda-forge modelflow -y 
+conda activate mf 
+jupyter contrib nbextension install --user

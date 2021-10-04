@@ -5,8 +5,10 @@ in the start menu: select anaconda promth
 
 conda  install  -c ibh -c  conda-forge modelflow -y 
 jupyter contrib nbextension install --user
+jupyter nbextension enable hide_input_all/main && jupyter nbextension enable splitcell/splitcell && jupyter nbextension enable toc2/main
 
-# or if in seperate enviorement 
+# or if in seperate enviroment 
 conda create -n mf -c ibh -c  conda-forge modelflow -y 
 conda activate mf 
 jupyter contrib nbextension install --user
+jupyter nbextension enable hide_input_all/main && jupyter nbextension enable splitcell/splitcell && jupyter nbextension enable toc2/main

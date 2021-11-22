@@ -76,6 +76,7 @@ class GrapUNModel():
         self.all_frml = [nz.normal(l,add_adjust=(typ=='stoc')) for l,typ in tqdm(zip(line,line_type),desc='Normalizing model',total=len(line),bar_format=bars)]
         lfname = ["<Z,EXO> " if typ == 'stoc' else '' for typ in line_type ]
         lfname = ["" if typ == 'stoc' else '' for typ in line_type ]
+        # breakpoint()
         self.rorg = [fname + f.normalized for f,fname in zip(self.all_frml,lfname) ]
                 
         self.rres = [f.calc_adjustment for f in self.all_frml if len(f.calc_adjustment)]
@@ -263,9 +264,9 @@ class GrapUNModel():
         return dict2
     
 # os.environ['PYTHONBREAKPOINT']=None
-asia = GrapUNModel(data='data/model_data_8nov.xlsx',
-                   frml='model/sim_v7_equations.txt',
-                   modelname='Asia_8Nov')
+asia = GrapUNModel(data='data/model_data_19nov.xlsx',
+                   frml='model/equations_19nov.txt',
+                   modelname='Asia_19Nov')
 asia.test_model(2020,2050,maxerr=200,tol=0.000001,showall=1)
 
 #%%
@@ -286,7 +287,7 @@ masia.basedf = baseline
 _ = masia(baseline,2021,2050,silent=0)
 masia['*_GDI'].dif.plot(sharey=0,colrow=1)
 
-masia.modeldump('asia/Asia_8nov.pcim')
+# masia.modeldump('asia/Asia_19nov.pcim')
 #%% experiment
 altdf = baseline.copy()
 altdf.loc[2021:2021,'KHM_GCARBR_A'] = altdf.loc[2021:2021,'KHM_GCARBR_A'] + 20  

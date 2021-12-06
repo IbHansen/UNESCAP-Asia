@@ -265,8 +265,8 @@ class GrapUNModel():
     
 # os.environ['PYTHONBREAKPOINT']=None
 asia = GrapUNModel(data='data/model_data_19nov.xlsx',
-                   frml='model/equations_19nov.txt',
-                   modelname='Asia_19Nov')
+                   frml='model/equations_6Dec.txt',
+                   modelname='Asia_6Dec')
 asia.test_model(2020,2050,maxerr=200,tol=0.000001,showall=1)
 
 #%%
@@ -287,7 +287,7 @@ masia.basedf = baseline
 _ = masia(baseline,2021,2050,silent=0)
 masia['*_GDI'].dif.plot(sharey=0,colrow=1)
 
-# masia.modeldump('asia/Asia_19nov.pcim')
+# masia.modeldump('asia/Asia_6Dec.pcim')
 #%% experiment
 altdf = baseline.copy()
 altdf.loc[2021:2021,'KHM_GCARBR_A'] = altdf.loc[2021:2021,'KHM_GCARBR_A'] + 20  

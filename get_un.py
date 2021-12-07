@@ -287,7 +287,7 @@ masia.basedf = baseline
 _ = masia(baseline,2021,2050,silent=0)
 masia['*_GDI'].dif.plot(sharey=0,colrow=1)
 
-# masia.modeldump('asia/Asia_6Dec.pcim')
+masia.modeldump('asia/Asia_6Dec.pcim')
 #%% experiment
 altdf = baseline.copy()
 altdf.loc[2021:2021,'KHM_GCARBR_A'] = altdf.loc[2021:2021,'KHM_GCARBR_A'] + 20  

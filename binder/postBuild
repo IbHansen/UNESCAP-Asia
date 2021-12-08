@@ -1,5 +1,5 @@
 #!/bin/bash 
-jupyter trust "Asia/Carbon pricing simulation tool – single country.ipynb"
+jupyter trust "Asia/Carbon pricing simulation tool single country.ipynb"
 jupyter trust "Asia/Carbon tax experiments.ipynb"
 jupyter trust "Asia/Impact of global carbon tax rates with revenue channelled back into the economy.ipynb"
 jupyter trust "Asia/Overview.ipynb"
